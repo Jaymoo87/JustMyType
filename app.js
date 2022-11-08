@@ -1,4 +1,4 @@
-$("document").ready(function () {
+$(document).ready(function () {
   //null start to create condition that the game starts when typing starts instead of when the page loads
   let start = null;
 
@@ -24,7 +24,10 @@ $("document").ready(function () {
   errorcount = 0;
   //used to set up the first sentence when the page loads.
   //also used within the keypress function to change to the next sentence.
-  nextSentence();
+
+  //nextSentence();
+
+  sentencediv.append(sentences[0]);
 
   //what happens when typing starts
   $(document).keypress(function (e) {
@@ -35,28 +38,28 @@ $("document").ready(function () {
     //moves the yellow block div left 17.5px (Thanks Amanda)
     // sentence letter in each sentence
     //increases letter count to move along to the next expected letter.
-    letterIndex++;
+
+    $("#yellow-block").css("left", "+=17.5px");
+    $("#target-letter").text(letter);
     letter = sentences[sentenceIndex][letterIndex];
     loggamestate();
-    $("#yellow-block").css("left", "+=17.5");
-
-    $("#target-letter").text(letter);
 
     if (e.key === letter) {
-      alert("it matches");
+      letterIndex++;
+      //alert("it matches");
       // adds a span with a glyphicon (bootstrap) check mark for a matching letter.
       $("#feedback").append(
         "<span class= 'glyphicon glyphicon-ok-circle'></span>"
       );
     } else {
-      alert("it doesn't match");
+      letterIndex++;
+      //alert("it doesn't match");
       //some process as above, but red X glyphicon for not matching a letter.
-      errorcount++;
       $("#feedback").append(
         "<span class= 'glyphicon glyphicon-remove-circle'></span>"
       );
-
       //increase errorcount
+      errorcount++;
     }
 
     //Sentences
@@ -67,15 +70,15 @@ $("document").ready(function () {
       letterIndex = 0;
     }
 
-    if (sentenceIndex === sentences.length) {
+    if (sentenceIndex == 5) {
       endGame();
     } else {
       //clears the #sentence div(used variable) when the array reaches [5] and then reset the yellow block
       sentencediv.empty();
       displaysentence = sentences[sentenceIndex];
-      $("#yellow-block").css("left", "15px");
       // reset at the end of the sentenceArray.
       nextSentence();
+      $("#yellow-block").css("left", "15px");
       letter = sentences[sentenceIndex][letterIndex];
       $("#target-letter").text(letter);
       $("#feedback").empty();
@@ -89,7 +92,7 @@ $("document").ready(function () {
 
   function endGame() {
     //clear out all text and prepare to points to display
-    alert("game over");
+    alert("Game Over, let's see how you did.");
     $("#feedback").empty();
     $("#target-letter").empty();
     let end = $.now();
@@ -104,11 +107,11 @@ $("document").ready(function () {
     let wordspm = (wordcount * (end - start)) / 1000 / 60 - 2 * errorcount;
 
     //points message and button to reset game
-    $("feedback").append(
-      "<span class>" + "Points:" + wordspm + "words per minute" + "</span>",
+    $("#feedback").append(
+      "<span>" + "Points:" + wordspm + "words per minute" + "</span>",
       '<button id= "reset">Reset</button>'
     );
-    $("reset").click(function () {
+    $("#reset").click(function () {
       //reloads whole document.
       location.reload();
     });
