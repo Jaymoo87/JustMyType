@@ -33,30 +33,31 @@ $(document).ready(function () {
   $(document).keypress(function (e) {
     if (start === null) {
       // redefines the start time of the game to the time when typing started.
+      letterIndex = 0;
       start = $.now();
     }
     //moves the yellow block div left 17.5px (Thanks Amanda)
     // sentence letter in each sentence
     //increases letter count to move along to the next expected letter.
 
-    $("#yellow-block").css("left", "+=17.5px");
+    $("#yellow-box").css("left", "+=17.5");
     $("#target-letter").text(letter);
     letter = sentences[sentenceIndex][letterIndex];
     loggamestate();
 
     if (e.key === letter) {
       letterIndex++;
+
+      $("#feedback").append("<span class= 'glyphicon glyphicon-ok'></span>");
       //alert("it matches");
       // adds a span with a glyphicon (bootstrap) check mark for a matching letter.
-      $("#feedback").append(
-        "<span class= 'glyphicon glyphicon-ok-circle'></span>"
-      );
     } else {
       letterIndex++;
+      letter = sentences[sentenceIndex][letterIndex];
       //alert("it doesn't match");
       //some process as above, but red X glyphicon for not matching a letter.
       $("#feedback").append(
-        "<span class= 'glyphicon glyphicon-remove-circle'></span>"
+        "<span class= 'glyphicon glyphicon-remove'></span>"
       );
       //increase errorcount
       errorcount++;
@@ -69,7 +70,6 @@ $(document).ready(function () {
       sentenceIndex++;
       letterIndex = 0;
     }
-
     if (sentenceIndex == 5) {
       endGame();
     } else {
@@ -85,7 +85,7 @@ $(document).ready(function () {
     }
   });
 
-  loggamestate();
+  //loggamestate();
   function loggamestate() {
     console.log({ sentenceIndex, letterIndex, letter });
   }
